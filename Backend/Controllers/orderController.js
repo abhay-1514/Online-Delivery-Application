@@ -88,23 +88,39 @@ const getUserOrders = async (req, res) => {
 };
 
 const updateOrderStatus = async (req, res) => {
-  const { id } = req.params;
-  const { status } = req.body;
+  const { id } = req.params; // Order ID from the request parameters
+  const { status } = req.body; // New status from the request body
+  const deliveryPersonnel = await DeliveryPersonnel.findOne({ user: req.user.id });
+    
+  if (!deliveryPersonnel) {
+    return res.status(404).json({ message: 'Delivery personnel not found' });
+  }
+  const deliveryPersonnelId = deliveryPersonnel.id; // Logged-in delivery personnel's ID from JWT
 
   try {
+    // Find the order by its ID
     const order = await Order.findById(id);
+
+    // Check if the order exists
     if (!order) {
       return res.status(404).json({ message: 'Order not found' });
     }
 
+    // Check if the logged-in delivery personnel is assigned to the order
+    if (order.deliveryPersonnel.toString() !== deliveryPersonnelId.toString()) {
+      return res.status(403).json({ message: 'You are not authorized to update this order' });
+    }
+
+    // Update the status of the order
     order.status = status;
     await order.save();
 
-    res.status(200).json({ message: 'Order status updated', order });
+    res.status(200).json({ message: 'Order status updated successfully', order });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error while updating order status', error: error.message });
   }
 };
+
 
 module.exports = { placeOrder, getUserOrders, updateOrderStatus, assignOrderToDeliveryPersonnel, getAssignedOrdersForDeliveryPersonnel };

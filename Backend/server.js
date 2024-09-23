@@ -5,7 +5,8 @@ const userRoutes = require('./Routes/userRoutes');
 const productRoutes = require('./Routes/productRoutes');
 const orderRoutes = require('./Routes/orderRoutes');
 
-dotenv.config();
+require('dotenv').config({ path: './dotENV/.env' }); // Adjust the path based on the new location of your .env file
+
 connectDB();
 
 const app = express();
@@ -24,5 +25,5 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: 'Internal Server Error' });
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT ;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
