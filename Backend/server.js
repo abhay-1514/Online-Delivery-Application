@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const dotenv = require('dotenv');
 const connectDB = require('./Config/db');
 const userRoutes = require('./Routes/userRoutes');
@@ -7,9 +8,15 @@ const orderRoutes = require('./Routes/orderRoutes');
 
 require('dotenv').config({ path: './dotENV/.env' }); // Adjust the path based on the new location of your .env file
 
-connectDB();
+connectDB(); 
 
 const app = express();
+
+app.use(cors({
+  origin: 'http://localhost:3000', // Allow requests from your frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed HTTP methods
+  credentials: true // Allow credentials (cookies, authorization headers, etc.)
+}));
 
 // Middleware
 app.use(express.json()); // For parsing application/json
