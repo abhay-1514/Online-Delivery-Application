@@ -23,7 +23,7 @@
   .register-container input,
   .register-container select {
     padding: 10px;
-    margin-bottom: 16px;
+    margin-bottom: 16px; 
     border: 1px solid #ccc;
     border-radius: 4px;
   }
