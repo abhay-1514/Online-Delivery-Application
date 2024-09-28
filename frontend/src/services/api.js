@@ -6,9 +6,7 @@ const api = axios.create({
   baseURL: 'http://localhost:5000/api', // Adjust this URL as per your backend
 });
 
-const getAuthToken = () => {
-    return localStorage.getItem('token'); // Retrieve the token from local storage
-};
+const API_URL = 'http://localhost:5000/api';
 
 // Auth request for login
 export const login = async (data) => {
@@ -40,45 +38,100 @@ export const getAssignedOrders = async (token) => {
 
 // Add a product
 export const addProduct = async (productData) => {
-    const token = getAuthToken();
-    try {
-    const response = api.post('/products/', productData, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  return response.data;
-} catch (error) {
-    throw error; // Rethrow the error for handling in the calling function
-}
+  try {
+    const response = await axios.post(`${API_URL}/products`, productData, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 // Get all products added by the vendor
 export const getVendorProducts = async () => {
-    const token = getAuthToken();
-  return api.get('/products', {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.get(`${API_URL}/products`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 // Update a product
-export const updateProduct = async (id, productData) => {
-    const token = getAuthToken();
-  return api.put(`/products/${id}`, productData, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+export const updateProduct = async (productId, updatedProductData) => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.put(`${API_URL}/products/${productId}`, updatedProductData, {
+      headers: {
+        Authorization: `Bearer ${ token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 // Delete a product
-export const deleteProduct = async (id) => {
-    const token = getAuthToken();
-  return api.delete(`/products/${id}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+export const deleteProduct = async (productId) => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.delete(`${API_URL}/products/${productId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const assignDeliveryPersonnel = async (orderId, personnelId) => {
+  const token = localStorage.getItem('token');
+  return axios.put(`http://localhost:5000/api/orders/${orderId}/assign`, 
+    { personnelId }, 
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+};
+
+
+export const getAllProducts = async () => {
+  return await axios.get('http://localhost:5000/api/products/');
+};
+
+export const placeOrder = async (orderDetails) => {
+  try{
+    const token = localStorage.getItem('token');
+    const response = await axios.post(`${API_URL}/orders/place`, orderDetails , {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch(error){
+    throw error;
+  }
+};
+
+export const getVendorOrders = async () => {
+  try{
+    const token = localStorage.getItem('token');
+    const response = await axios.get(`${API_URL}/orders/vendor-orders`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
   });
+  return response.data;
+} catch(error){
+    throw error;
+}
 };

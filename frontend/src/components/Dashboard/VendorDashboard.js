@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { addProduct, getVendorProducts, updateProduct, deleteProduct } from '../../services/api';
-import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify'; // Import toast
-import 'react-toastify/dist/ReactToastify.css'; // Import styles
-import '../../Styles/VendorDashboard.css'; // Create CSS file for styling
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import '../../Styles/VendorDashboard.css';
 
 const VendorDashboard = () => {
   const [products, setProducts] = useState([]);
@@ -14,24 +13,26 @@ const VendorDashboard = () => {
     price: '',
     category: '',
   });
-  const [editingProduct, setEditingProduct] = useState(null);
+  const [editingProduct, setEditingProduct] = useState(null); // Track the product being edited
+
+  const navigate = useNavigate(); // Initialize useNavigate
 
   // Fetch products when the component mounts
-useEffect(() => {
+  useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await getVendorProducts(products); // Use the updated API call
-        setProducts(response.data);
+        const response = await getVendorProducts(); // Now using the API function
+        console.log(response)
+        setProducts(response);
       } catch (error) {
         console.error('Error fetching products', error);
         toast.error('Failed to fetch products.');
       }
     };
-  
     fetchProducts();
   }, []);
 
-  // Handle input change for new and editing product
+  // Handle input change for both new and editing product
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (editingProduct) {
@@ -41,52 +42,38 @@ useEffect(() => {
     }
   };
 
-//   // Add a new product
-//   const handleAddProduct = async (e) => {
-//     e.preventDefault();
-//     try {
-//       const response = await addProduct(newProduct);
-//       setProducts([...products, response]);
-//       toast.success('Product added successfully!');
-//       setNewProduct({ name: '', description: '', price: '', category: '' }); // Reset form
-//     } catch (error) {
-//       console.error('Error adding product', error);
-//       toast.error('Failed to add product.');
-//     }
-//   };
-
-const handleAddProduct = async (e) => {
+  // Handle Add New Product
+  const handleAddProduct = async (e) => {
     e.preventDefault();
     try {
-        const response = await axios.post('http://localhost:5000/api/products/', newProduct, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}` // Include token in headers
-            }
-        });
-        setProducts([...products, response.data]);
-        toast.success('Product added successfully!');
-        setNewProduct({ name: '', description: '', price: '', category: '' }); // Reset form
+      const addedProduct = await addProduct(newProduct); // Now using the API function
+      setProducts([...products, addedProduct]); // Add the new product to the state
+      toast.success('Product added successfully!');
+      setNewProduct({ name: '', description: '', price: '', category: '' }); // Reset form
     } catch (error) {
-        console.error('Error adding product', error);
-        toast.error('Failed to add product.');
+      console.error('Error adding product', error);
+      toast.error('Failed to add product.');
     }
-};
+  };
 
-
-  // Start editing a product
+  // Start editing a product (populate the form with existing product details)
   const handleEditProduct = (product) => {
-    setEditingProduct(product);
+    setEditingProduct(product); // Populate the form with the product's details
   };
 
   // Update a product
   const handleUpdateProduct = async (e) => {
     e.preventDefault();
     try {
-      const response = await updateProduct(editingProduct._id, editingProduct);
-      const updatedProducts = products.map((prod) => (prod._id === response._id ? response : prod));
+      const updatedProduct = await updateProduct(editingProduct._id, editingProduct); // Now using the API function
+      const updatedProducts = products.map((prod) =>
+        prod._id === editingProduct._id ? updatedProduct : prod
+      );
       setProducts(updatedProducts);
+
       toast.success('Product updated successfully!');
-      setEditingProduct(null); // Clear editing state
+      setEditingProduct(null); // Clear the editing state
+      setNewProduct({ name: '', description: '', price: '', category: '' }); // Reset the form
     } catch (error) {
       console.error('Error updating product', error);
       toast.error('Failed to update product.');
@@ -96,7 +83,7 @@ const handleAddProduct = async (e) => {
   // Delete a product
   const handleDeleteProduct = async (id) => {
     try {
-      await deleteProduct(id);
+      await deleteProduct(id); // Using the API function
       setProducts(products.filter((product) => product._id !== id));
       toast.success('Product deleted successfully!');
     } catch (error) {
@@ -105,9 +92,31 @@ const handleAddProduct = async (e) => {
     }
   };
 
+    // Handle Logout
+    const handleLogout = () => {
+      localStorage.removeItem('token'); // Clear the token from localStorage
+      toast.success('Logged out successfully!');
+      setTimeout(()=>{
+        navigate('/');
+      },1000);
+       // Redirect to the login page
+      
+    };
+  
+
   return (
     <div className="vendor-dashboard">
       <h1>Vendor Dashboard</h1>
+
+      {/* Navigation Button to Vendor Orders */}
+      <button className="navigate-orders-button" onClick={() => navigate('/vendordashboard/orders')}>
+        View and Manage Orders
+      </button>
+
+       {/* Logout Button */}
+       <button className="logout-button" onClick={handleLogout}>
+        Logout
+      </button>
 
       {/* Product Form */}
       <form onSubmit={editingProduct ? handleUpdateProduct : handleAddProduct}>
@@ -151,14 +160,13 @@ const handleAddProduct = async (e) => {
         <h2>Your Products</h2>
         <ul>
           {products.length > 0 ? (
-            products.map(product => (
+            products.map((product) => (
               <li key={product._id}>
                 <h3>{product.name}</h3>
                 <p>{product.description}</p>
-                <p>Price: ${product.price}</p>
+                <p>Price: Rs.{product.price}</p>
                 <p>Category: {product.category}</p>
-                {/* Buttons for editing or deleting products */}
-                <button onClick={() => handleEditProduct(product)}>Edit</button>
+                <button onClick={() => handleEditProduct(product)}>Update</button> {/* Edit button */}
                 <button onClick={() => handleDeleteProduct(product._id)}>Delete</button>
               </li>
             ))
@@ -168,7 +176,7 @@ const handleAddProduct = async (e) => {
         </ul>
       </section>
 
-      <ToastContainer 
+      <ToastContainer
         position="top-right"
         autoClose={3000}
         hideProgressBar={false}

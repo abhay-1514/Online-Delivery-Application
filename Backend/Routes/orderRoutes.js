@@ -4,7 +4,8 @@ const {
   getUserOrders, 
   updateOrderStatus, 
   assignOrderToDeliveryPersonnel, 
-  getAssignedOrdersForDeliveryPersonnel // Import the function
+  getAssignedOrdersForDeliveryPersonnel,
+  getVendorOrders // Import the function
 } = require('../Controllers/orderController');
 const { protect } = require('../Middleware/authMiddleware');
 
@@ -13,6 +14,7 @@ const router = express.Router();
 router.post('/place', protect, placeOrder); 
 router.get('/myorders', protect, getUserOrders); 
 router.put('/:id/status', protect, updateOrderStatus); 
+router.get('/vendor-orders', protect, getVendorOrders);
 router.put('/assign-delivery', protect, assignOrderToDeliveryPersonnel); 
 
 // New route for delivery personnel to get assigned orders

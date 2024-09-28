@@ -2,6 +2,17 @@ const Order = require('../Models/order'); // Ensure this path is correct
 const Product = require('../Models/product');
 const DeliveryPersonnel = require('../Models/deliveryPersonnel'); // Ensure this path is correct
 
+// Get all orders for a vendor
+const getVendorOrders = async (req, res) => {
+  try {
+    const vendorProducts = await Product.find({ vendor: req.user.id });
+    const productIds = vendorProducts.map(product => product._id);
+    const orders = await Order.find({ product: { $in: productIds } }).populate('product').populate('deliveryPersonnel');
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching orders' });
+  }
+};
 
 const assignOrderToDeliveryPersonnel = async (req, res) => {
   const { orderId, deliveryPersonnelId } = req.body;
@@ -46,34 +57,52 @@ const getAssignedOrdersForDeliveryPersonnel = async (req, res) => {
   }
 };
 
+ 
 const placeOrder = async (req, res) => {
-  const { products } = req.body; // Removed deliveryPersonnelId
+  console.log("Request Body:", req.body); // Log request body to debug
+
+  const { products } = req.body;
+
+  if (!products || !Array.isArray(products)) {
+    return res.status(400).json({ message: 'Invalid products structure' });
+  }
 
   try {
-    const fetchedProducts = await Product.find({ '_id': { $in: products.map(p => p.product) } });
+    // Log the product IDs being requested
+    const productIds = products.map(p => p.product); 
+    console.log("Product IDs from request:", productIds);
+
+    const fetchedProducts = await Product.find({ '_id': { $in: productIds } });
+
+    if (fetchedProducts.length === 0) {
+      return res.status(404).json({ message: 'No products found for the given IDs' });
+    }
+
     let totalAmount = 0;
     const orderProducts = fetchedProducts.map(product => {
       const orderedProduct = products.find(p => p.product.toString() === product._id.toString());
       const quantity = orderedProduct.quantity;
-      const price = product.price;
-      totalAmount += price * quantity;
-      return { product: product._id, quantity, price };
+      totalAmount += product.price * quantity;
+      return { product: product._id, quantity, price: product.price };
     });
 
     const newOrder = new Order({
       user: req.user.id,
       products: orderProducts,
       totalAmount,
-      
     });
+
+    console.log("New Order to be saved:", newOrder);  // Log the new order
 
     await newOrder.save();
     res.status(201).json({ message: 'Order placed successfully', order: newOrder });
   } catch (error) {
-    console.error(error);
+    console.error("Error during placing order:", error);
     res.status(500).json({ message: 'Server error while placing order' });
   }
 };
+
+
 
 
 
@@ -123,4 +152,4 @@ const updateOrderStatus = async (req, res) => {
 };
 
 
-module.exports = { placeOrder, getUserOrders, updateOrderStatus, assignOrderToDeliveryPersonnel, getAssignedOrdersForDeliveryPersonnel };
+module.exports = { placeOrder, getUserOrders, updateOrderStatus, assignOrderToDeliveryPersonnel, getAssignedOrdersForDeliveryPersonnel, getVendorOrders };

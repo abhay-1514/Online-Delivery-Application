@@ -7,6 +7,7 @@ import CustomerDashboard from './components/Dashboard/CustomerDashboard';
 import VendorDashboard from './components/Dashboard/VendorDashboard';
 import DeliveryDashboard from './components/Dashboard/DeliveryDashboard';
 import HomePage from '../src/pages/HomePage';
+import VendorOrders from './components/Orders/venderOrders';
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/customerdashboard" element={<CustomerDashboard />} />
         <Route path="/vendordashboard" element={<VendorDashboard />} />
+        <Route path="/vendororders" element={<VendorOrders />} />
         <Route path="/deliverydashboard" element={<DeliveryDashboard />} />
       </Routes>
     </Router>
