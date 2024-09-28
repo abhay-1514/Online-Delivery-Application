@@ -21,7 +21,7 @@ const addProduct = async (req, res) => {
   }
 };
 
-// Get all products (for customers and vendors)
+// Get all products (for customers only)
 const getAllProducts = async (req, res) => {
   try {
     const products = await Product.find();
@@ -30,6 +30,17 @@ const getAllProducts = async (req, res) => {
     res.status(500).json({ message: 'Server error while fetching products' });
   }
 };
+
+// Get all products added by the logged-in vendor
+const getVendorProducts = async (req, res) => {
+  try {
+    const products = await Product.find({ vendor: req.user.id }); // Filter products by vendor
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error while fetching products' });
+  }
+};
+
 
 // Update a product (Vendor only)
 const updateProduct = async (req, res) => {
@@ -88,4 +99,5 @@ module.exports = {
   getAllProducts,
   updateProduct,
   deleteProduct,
+  getVendorProducts,
 };

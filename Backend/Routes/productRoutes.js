@@ -4,6 +4,7 @@ const {
   getAllProducts,
   updateProduct,
   deleteProduct,
+  getVendorProducts,
 } = require('../Controllers/productController');
 const { protect } = require('../Middleware/authMiddleware');
 const router = express.Router();
@@ -11,6 +12,7 @@ const router = express.Router();
 // Routes for managing products
 router.post('/', protect, addProduct);  // Vendors add products
 router.get('/', getAllProducts);  // Customers view all products
+router.get('/vendor', protect, getVendorProducts)// Vendor view his own products
 router.put('/:id', protect, updateProduct);  // Vendors update their products
 router.delete('/:id', protect, deleteProduct);  // Vendors delete their products
 

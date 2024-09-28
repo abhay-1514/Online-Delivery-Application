@@ -28,6 +28,8 @@ const Login = () => {
         const data = response.data; // Define data here
         console.log('Login successful:', data);
         toast.success("Login successful!"); // Show success toast
+
+        localStorage.setItem('token', data.token); // Add this line to store the token
         
         // Navigate to the respective dashboard based on user role
         if (data.role === 'Customer') {
