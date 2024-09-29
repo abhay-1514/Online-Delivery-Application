@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify'; // Import toast
 import 'react-toastify/dist/ReactToastify.css';
 import '../../Styles/Login.css'; // Adjust the path if necessary
-import { login } from '../../services/api';
+import { login, fetchDetails } from '../../services/api'; // Import fetchDetails
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -22,28 +22,33 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await login (formData); // Use the login method from api.js
+      const response = await login(formData); // Use the login method from api.js
 
       if (response.status === 200) {
         const data = response.data; // Define data here
+        console.log(data);
         console.log('Login successful:', data);
         toast.success("Login successful!"); // Show success toast
 
-        localStorage.setItem('token', data.token); // Add this line to store the token
-        
+        localStorage.setItem('token', data.token); // Store the token
+
+        // Fetch user details
+        const userDetails = await fetchDetails(); // Call fetchDetails to get user info
+        console.log('User Details:', userDetails); // Log user details if needed
+
         // Navigate to the respective dashboard based on user role
         if (data.role === 'Customer') {
-            setTimeout(() => {
-          navigate('/customerdashboard');
-            },1000);
+          setTimeout(() => {
+            navigate('/customerdashboard', { state: { userDetails } });
+          }, 1000);
         } else if (data.role === 'Vendor') {
-            setTimeout(() => {
-          navigate('/vendordashboard');
-        },1000);
+          setTimeout(() => {
+            navigate('/vendordashboard', { state: { userDetails } });
+          }, 1000);
         } else if (data.role === 'DeliveryPersonnel') {
-            setTimeout(() => {
-          navigate('/deliverypersonneldashboard');
-        },1000);
+          setTimeout(() => {
+            navigate('/deliverypersonneldashboard', { state: { userDetails } });
+          }, 1000);
         }
       } else {
         // Handle case where response is not 200

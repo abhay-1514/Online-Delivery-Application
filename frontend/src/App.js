@@ -8,9 +8,12 @@ import VendorDashboard from './components/Dashboard/VendorDashboard';
 import DeliveryDashboard from './components/Dashboard/DeliveryDashboard';
 import HomePage from '../src/pages/HomePage';
 import VendorOrders from './components/Orders/venderOrders';
+import { CartProvider } from './context/cartContext'; 
+import CartPage from './pages/cartPage';
 
 const App = () => {
   return (
+    <CartProvider> {/* Wrap the app with CartProvider to provide cart state */}
     <Router>
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -20,8 +23,10 @@ const App = () => {
         <Route path="/vendordashboard" element={<VendorDashboard />} />
         <Route path="/vendororders" element={<VendorOrders />} />
         <Route path="/deliverydashboard" element={<DeliveryDashboard />} />
+        <Route path="/cart" element={<CartPage />} />
       </Routes>
     </Router>
+    </CartProvider>
   );
 };
 

@@ -3,6 +3,22 @@ const DeliveryPersonnel = require('../Models/deliveryPersonnel');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+const getUserDetails = async (req, res) => {
+  try {
+    const userId = req.user.id; // Assuming you store user ID in the token
+    const user = await User.findById(userId).select('name email'); // Select the fields you want to return
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error('Error fetching user details:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
 //Register User
 const registerUser = async (req, res) => {
   const { name, email, password, role, phone, address } = req.body; // Include phone and address
@@ -72,4 +88,4 @@ const loginUser = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, loginUser };
+module.exports = { registerUser, loginUser, getUserDetails };

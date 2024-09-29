@@ -97,10 +97,8 @@ const VendorDashboard = () => {
       localStorage.removeItem('token'); // Clear the token from localStorage
       toast.success('Logged out successfully!');
       setTimeout(()=>{
-        navigate('/');
-      },1000);
-       // Redirect to the login page
-      
+        navigate('/');// Redirect to the login page
+      },1000);      
     };
   
 

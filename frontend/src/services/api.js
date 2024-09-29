@@ -135,3 +135,18 @@ export const getVendorOrders = async () => {
     throw error;
 }
 };
+
+export const fetchDetails = async ()=> {
+  try{
+    const token = localStorage.getItem('token');
+    const response = await axios.get(`${API_URL}/users/userdetails`,{
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    }
+  });
+  return response.data;
+} catch(error){
+  throw error;
+}
+};

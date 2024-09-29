@@ -1,12 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { getAllProducts, placeOrder } from '../../services/api'; // Use your API methods
+import React, { useContext, useEffect, useState } from 'react';
+import { getAllProducts } from '../../services/api';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
+import { CartContext } from '../../context/cartContext';  // Import Cart Context
 import 'react-toastify/dist/ReactToastify.css';
-import '../../Styles/CustomerDashboard.css'; // Create CSS file for styling
+import '../../Styles/CustomerDashboard.css';
 
 const CustomerDashboard = () => {
   const [products, setProducts] = useState([]);
-  const [cart, setCart] = useState([]);
+  const { cart, setCart } = useContext(CartContext);  // Use cart and setCart from context
+  const navigate = useNavigate(); // Initialize useNavigate
+  const location = useLocation(); // Use location to access passed state
+
+  // Retrieve user's name from location state
+  const userName = location.state?.userDetails?.name || 'User'; // Default to 'User' if name is not available
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -17,86 +24,50 @@ const CustomerDashboard = () => {
         toast.error('Failed to fetch products.');
       }
     };
-
     fetchProducts();
   }, []);
 
-  // Add product to cart (with quantity management)
   const addToCart = (product) => {
     const existingProductIndex = cart.findIndex(item => item.product._id === product._id);
-
     if (existingProductIndex >= 0) {
-      // If the product already exists in the cart, increase the quantity
       const updatedCart = [...cart];
       updatedCart[existingProductIndex].quantity += 1;
       setCart(updatedCart);
     } else {
-      // If the product doesn't exist in the cart, add it with quantity 1
       setCart([...cart, { product, quantity: 1 }]);
     }
-
     toast.success('Product added to cart!');
   };
 
-  // Remove product from cart (decrease quantity or remove if quantity is 0)
-  const removeFromCart = (productId) => {
-    const existingProductIndex = cart.findIndex(item => item.product._id === productId);
-
-    if (existingProductIndex >= 0) {
-      const updatedCart = [...cart];
-
-      // Decrease quantity or remove the item
-      if (updatedCart[existingProductIndex].quantity > 1) {
-        updatedCart[existingProductIndex].quantity -= 1;
-      } else {
-        updatedCart.splice(existingProductIndex, 1); // Remove the product if quantity is 1
-      }
-
-      setCart(updatedCart);
-    }
+  // Navigate to Cart Page
+  const goToCart = () => {
+    navigate('/cart');
   };
 
-  // Calculate total price
-  const calculateTotal = () => {
-    return cart.reduce((total, item) => total + item.product.price * item.quantity, 0);
-  };
-
-  // Place order for all products in cart
-  const handlePlaceOrder = async () => {
-    const orderDetails = {
-      products: cart.map(item => ({
-        product: item.product._id,  // Ensure this is the correct ID for your product
-        quantity: item.quantity
-      }))
-    };
-  
-    console.log("Order Details to be sent:", orderDetails); // Log the order details being sent
-  
-    try {
-      const response = await placeOrder(orderDetails);
-      
-      // Check if response data is structured as expected
-      if (response && response.data) {
-        const { message, order } = response.data;
-        console.log("Success Message:", message);  // Log the success message
-        console.log("Placed Order Details:", order); // Log order details
-  
-        // Show a success notification
-        toast.success(message);
-      } else {
-        console.error("Unexpected response format:", response);
-      }
-    } catch (error) {
-      console.error('Error placing order:', error);
-      toast.error('Error placing order.');
-    }
+  const handleLogout = () => {
+    localStorage.removeItem('token'); // Clear the token from localStorage
+    toast.success('Logged out successfully!');
+    setTimeout(() => {
+      navigate('/'); // Redirect to the login page
+    }, 1000);      
   };
 
   return (
     <div className="customer-dashboard">
       <h1>Customer Dashboard</h1>
 
-      {/* Product Listing */}
+      {/* Welcome message */}
+      <h2>Welcome back, {userName}!</h2>  {/* Display the user's name here */}
+
+      <button className="cart-button" onClick={goToCart}>
+        Go to Cart ({cart.length})
+      </button>
+
+      {/* Logout Button */}
+      <button className="logout-button" onClick={handleLogout}>
+        Logout
+      </button>
+
       <section className="products-section">
         <h2>All Products</h2>
         <ul>
@@ -111,29 +82,7 @@ const CustomerDashboard = () => {
         </ul>
       </section>
 
-      {/* Cart Section */}
-      <section className="cart-section">
-        <h2>Your Cart</h2>
-        <ul>
-          {cart.length > 0 ? (
-            cart.map(({ product, quantity }) => (
-              <li key={product._id}>
-                <h3>{product.name}</h3>
-                <p>Price: Rs.{product.price}</p>
-                <p>Quantity: {quantity}</p>
-                <button onClick={() => removeFromCart(product._id)}>Remove</button>
-                <button>Buy Now</button>
-              </li>
-            ))
-          ) : (
-            <p>Your cart is empty.</p>
-          )}
-        </ul>
-        <h3>Total Amount: Rs.{calculateTotal()}</h3>
-        <button onClick={handlePlaceOrder}>Place Order for All</button>
-      </section>
-
-      <ToastContainer 
+      <ToastContainer
         position="top-right"
         autoClose={3000}
         hideProgressBar={false}
