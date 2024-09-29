@@ -149,8 +149,8 @@ button.add-button:hover {
 }
 
 .Toastify__toast--success {
-  color: white;
-  background-color: #9cc7a6;
+  color: rgb(74, 220, 66);
+  background-color: #ffffff;
 }
 
 .Toastify__toast--error {

@@ -25,12 +25,18 @@ export const register = async (data) => {
 };
 
 // Fetch user orders
-export const getUserOrders = async (token) => {
-  return api.get('/orders/myorders', {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+export const getUserOrders = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.get(`${API_URL}/orders/myorders`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 // Fetch assigned orders for delivery personnel

@@ -79,6 +79,22 @@ html, body {
   margin: 0; /* Remove default margin */
 }
 
+/* Ensure that Toastify close button is not affected by other styles */
+.Toastify__close-button {
+  font-size: 14px !important; /* Set a consistent font size */
+  width: auto !important;     /* Override any width settings */
+  height: auto !important;    /* Override any height settings */
+  padding: 5px !important;    /* Set consistent padding */
+  line-height: 1 !important;  /* Set consistent line height */
+}
+
+/* Optional: If you want the icon to have a fixed size */
+.Toastify__close-button > svg {
+  width: 20px !important;     /* Set a fixed width for the close icon */
+  height: 20px !important;    /* Set a fixed height for the close icon */
+}
+
+
 /* Media Queries for Responsiveness */
 @media (max-width: 480px) {
   .register-container {

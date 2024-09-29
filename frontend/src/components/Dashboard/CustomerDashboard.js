@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { getAllProducts } from '../../services/api';
+import { getAllProducts, getUserOrders } from '../../services/api';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { CartContext } from '../../context/cartContext';  // Import Cart Context
@@ -8,6 +8,7 @@ import '../../Styles/CustomerDashboard.css';
 
 const CustomerDashboard = () => {
   const [products, setProducts] = useState([]);
+  const [orders, setOrders] = useState([]);
   const { cart, setCart } = useContext(CartContext);  // Use cart and setCart from context
   const navigate = useNavigate(); // Initialize useNavigate
   const location = useLocation(); // Use location to access passed state
@@ -25,7 +26,17 @@ const CustomerDashboard = () => {
       }
     };
     fetchProducts();
-  }, []);
+
+  const fetchOrders = async () => {
+    try {
+      const response = await getUserOrders();
+      setOrders(response.data.orders);  // Store the fetched orders
+    } catch (error) {
+      toast.error('Failed to fetch orders.');
+    }
+  };
+  fetchOrders();
+}, []);
 
   const addToCart = (product) => {
     const existingProductIndex = cart.findIndex(item => item.product._id === product._id);
@@ -80,6 +91,29 @@ const CustomerDashboard = () => {
             </li>
           ))}
         </ul>
+      </section>
+
+       {/* Customer Orders Section */}
+       <section className="orders-section">
+        <h2>Your Orders</h2>
+        {orders.length > 0 ? (
+          <ul>
+            {orders.map(order => (
+              <li key={order._id}>
+                <h3>Order #{order._id}</h3>
+                <p>Date: {new Date(order.createdAt).toLocaleDateString()}</p>
+                <p>Total: Rs.{order.totalAmount}</p>
+                <ul>
+                  {order.products.map(product => (
+                    <li key={product._id}>{product.name} - Rs.{product.price}</li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No orders found.</p>
+        )}
       </section>
 
       <ToastContainer

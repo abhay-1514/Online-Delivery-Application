@@ -54,7 +54,7 @@ const VendorOrders = () => {
           ))}
         </ul>
       ) : (
-        <p>No orders available.</p>
+        <p>No orders available.</p> 
       )}
 
       <ToastContainer />

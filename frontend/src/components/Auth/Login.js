@@ -104,7 +104,7 @@ const Login = () => {
         </div>
         <button type="submit">Login</button>
       </form>
-      <ToastContainer /> {/* Add ToastContainer here */}
+      <ToastContainer />
     </div>
   );
 };

@@ -7,8 +7,8 @@ import CustomerDashboard from './components/Dashboard/CustomerDashboard';
 import AdminDashboard from './components/Dashboard/AdminDashboard';
 import VendorDashboard from './components/Dashboard/VendorDashboard';
 import DeliveryDashboard from './components/Dashboard/DeliveryDashboard';
-import HomePage from '../src/pages/HomePage';
 import VendorOrders from './components/Orders/venderOrders';
+import HomePage from '../src/pages/HomePage';
 import { CartProvider } from './context/cartContext'; 
 import CartPage from './pages/cartPage';
 
@@ -22,7 +22,7 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/customerdashboard" element={<CustomerDashboard />} />
         <Route path="/vendordashboard" element={<VendorDashboard />} />
-        <Route path="/vendororders" element={<VendorOrders />} />
+        <Route path="/vendordashboard/orders" element={<VendorOrders />} />
         <Route path="/deliverydashboard" element={<DeliveryDashboard />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/admindashboard" element={<AdminDashboard />} />
