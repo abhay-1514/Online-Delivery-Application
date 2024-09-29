@@ -10,6 +10,10 @@ const userSchema = new mongoose.Schema(
       enum: ["Customer", "Vendor", "DeliveryPersonnel"],
       default: "Customer",
     },
+    isBlocked: {
+      type: Boolean,
+      default: false, // Default value is false (not blocked)
+    },
     deliveryPersonnelId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "DeliveryPersonnel",

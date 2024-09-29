@@ -150,7 +150,7 @@ const VendorDashboard = () => {
           placeholder="Product Category"
           required
         />
-        <button type="submit">{editingProduct ? 'Update Product' : 'Add Product'}</button>
+        <button className="add-button" type="submit">{editingProduct ? 'Update Product' : 'Add Product'}</button>
       </form>
 
       {/* Products List */}
@@ -164,8 +164,8 @@ const VendorDashboard = () => {
                 <p>{product.description}</p>
                 <p>Price: Rs.{product.price}</p>
                 <p>Category: {product.category}</p>
-                <button onClick={() => handleEditProduct(product)}>Update</button> {/* Edit button */}
-                <button onClick={() => handleDeleteProduct(product._id)}>Delete</button>
+                <button className="update-button" onClick={() => handleEditProduct(product)}>Update</button> {/* Edit button */}
+                <button className="delete-button" onClick={() => handleDeleteProduct(product._id)}>Delete</button>
               </li>
             ))
           ) : (

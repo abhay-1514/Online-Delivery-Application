@@ -1,47 +1,101 @@
+html, body {
+  height: 100%; /* Set the height for the html and body */
+  margin: 0; /* Remove default margin */
+}
+
 .register-container {
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh; /* Minimum height to cover full viewport */
+  background-color: #f4f4f4; /* Light gray background */
+  padding: 20px; /* Padding around the container */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  overflow-y: auto; /* Enable vertical scrolling if content overflows */
+}
+
+.register-container h2 {
+  color: #333; /* Darker color for the heading */
+  margin-bottom: 20px; /* Space below the heading */
+}
+
+.register-container form {
+  width: 100%;
+  max-width: 400px; /* Max width for the form */
+  background: white; /* White background for the form */
+  padding: 20px; /* Padding for the form */
+  border-radius: 8px; /* Rounded corners for the form */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Shadow for the form */
+}
+
+.register-container label {
+  display: block; /* Labels are block to occupy full width */
+  margin-bottom: 8px; /* Space below each label */
+  font-weight: bold; /* Bold font for labels */
+  color: #555; /* Darker color for labels */
+}
+
+.register-container input,
+.register-container select {
+  width: 100%; /* Full width for inputs and select */
+  padding: 12px; /* Padding for inputs and select */
+  margin-bottom: 20px; /* Space below inputs and select */
+  border: 1px solid #ccc; /* Light border for inputs and select */
+  border-radius: 5px; /* Rounded corners for inputs and select */
+  font-size: 16px; /* Font size for inputs and select */
+}
+
+.register-container input:focus,
+.register-container select:focus {
+  border-color: #2575fc; /* Change border color on focus */
+  outline: none; /* Remove default outline */
+  box-shadow: 0 0 5px rgba(37, 117, 252, 0.5); /* Subtle glow effect */
+}
+
+.register-container button {
+  width: 100%; /* Full width for the button */
+  padding: 12px; /* Padding for button */
+  background-color: #2575fc; /* Primary button color */
+  color: white; /* White text for button */
+  border: none; /* Remove default border */
+  border-radius: 5px; /* Rounded corners for button */
+  font-size: 16px; /* Font size for button */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s, transform 0.2s; /* Smooth transition */
+}
+
+.register-container button:hover {
+  background-color: #1a5bb8; /* Darker shade on hover */
+  transform: translateY(-2px); /* Slight lift on hover */
+}
+
+.register-container button:active {
+  transform: translateY(1px); /* Pressed effect */
+}
+
+.register-container p {
+  color: red; /* Error message color */
+  margin: 0; /* Remove default margin */
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 480px) {
+  .register-container {
+    padding: 10px; /* Reduce padding on smaller screens */
   }
-  
-  .register-container h2 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
+
   .register-container form {
-    display: flex;
-    flex-direction: column;
+    padding: 15px; /* Reduce padding in the form */
   }
-  
-  .register-container label {
-    margin-bottom: 8px;
+
+  .register-container h2 {
+    font-size: 1.5em; /* Smaller font size for heading */
   }
-  
+
   .register-container input,
-  .register-container select {
-    padding: 10px;
-    margin-bottom: 16px; 
-    border: 1px solid #ccc;
-    border-radius: 4px;
+  .register-container select,
+  .register-container button {
+    font-size: 14px; /* Smaller font size for inputs, selects, and buttons */
   }
-  
-  .error {
-    color: red;
-    margin-bottom: 16px;
-  }
-  
-  button {
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #45a049;
-  }
-  
+}

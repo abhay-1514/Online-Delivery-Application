@@ -1,62 +1,214 @@
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f8f9fa;
+  margin: 0;
+  padding: 0;
+}
+
 .vendor-dashboard {
-    padding: 20px;
-  }
-  
-  .products-section, .orders-section {
-    margin-bottom: 30px;
-  }
-  
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  li {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-bottom: 10px;
-  }
-  
-  .vendor-dashboard button {
-    margin-left: 10px ;
-    padding: 5px 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #45a049;
-  }
-  
-  .navigate-orders-button {
-    background-color: #4caf50;
-    color: white;
-    padding: 10px 20px;
-    margin-bottom: 20px;
-    border: none;
-    cursor: pointer;
-    border-radius: 4px;
-    font-size: 16px;
-  }
-  
-  .navigate-orders-button:hover {
-    background-color: #45a049;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+  color: #343a40;
+  margin-bottom: 20px;
+}
+
+button {
+  padding: 10px 15px;
+  margin: 10px 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.navigate-orders-button {
+  border-radius: 10px;
+  background-color: #007bff;
+  color: white;
+}
+
+.navigate-orders-button:hover{
+  background-color: #0061c9;
+}
+
+.logout-button {
+  border-radius: 10px;
+  float: right;
+  margin-left: auto; /* Align to the right */
+  background-color: #dc3545;
+  color: white;
+}
+
+.logout-button:hover {
+  background-color: #ae0011;
+}
+
+button:hover {
+  transform: scale(1.02);
+}
+
+button:focus {
+  outline: none;
+}
+
+form {
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+input,
+textarea {
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+input:focus,
+textarea:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.products-section {
+  margin-top: 20px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  padding: 15px;
+  border: 1px solid #e9ecef;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  background-color: #f1f3f5;
+  transition: background-color 0.3s;
+}
+
+li:hover {
+  background-color: #e2e6ea;
+}
+
+h3 {
+  margin: 0;
+  color: #495057;
+}
+
+p {
+  margin: 5px 0;
+}
+
+button.update-button {
+  border-radius: 10px;
+  background-color: #28a745; /* Green for Update button */
+  color: white;
+}
+
+button.update-button:hover {
+  background-color: #218838; /* Darker green on hover */
+}
+
+button.delete-button {
+  border-radius: 10px;
+  background-color: #28a745; /* Green for Update button */
+  color: white;
+}
+
+button.delete-button:hover {
+  background-color: #218838; /* Darker green on hover */
+}
+
+button.add-button {
+  border-radius: 10px;
+  margin-top: 10px;
+  background-color: #28a745; /* Green for Update button */
+  color: white;
+}
+
+button.add-button:hover {
+  background-color: #218838; /* Darker green on hover */
+}
+
+/* Add styles for the toast notifications */
+.Toastify__toast {
+  border-radius: 5px;
+}
+
+.Toastify__toast--success {
+  color: white;
+  background-color: #9cc7a6;
+}
+
+.Toastify__toast--error {
+  background-color: #dc3545;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+  .vendor-dashboard {
+    padding: 15px; /* Reduce padding */
   }
 
-  .logout-button {
-    background-color: #f44336;
-    color: white;
-    padding: 10px 20px;
-    margin-left: 10px;
-    border: none;
-    cursor: pointer;
-    border-radius: 4px;
-    font-size: 16px;
+  h1 {
+    font-size: 1.8rem; /* Reduce font size */
   }
-  
-  .logout-button:hover {
-    background-color: #d32f2f;
+
+  button {
+    width: 100%; /* Full-width buttons */
+    margin: 10px 0; /* Vertical margin */
   }
-  
+
+  form {
+    flex-direction: column; /* Stack inputs */
+  }
+
+  input,
+  textarea {
+    font-size: 14px; /* Smaller font size */
+  }
+
+  li {
+    padding: 10px; /* Reduced padding */
+  }
+
+  h3 {
+    font-size: 1.5rem; /* Adjust heading size */
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.5rem; /* Smaller heading for mobile */
+  }
+
+  input,
+  textarea {
+    font-size: 12px; /* Further reduce font size */
+  }
+
+  button {
+    font-size: 14px; /* Adjust button text size */
+  }
+
+  li {
+    padding: 8px; /* Further reduce padding */
+  }
+
+  h3 {
+    font-size: 1.25rem; /* Adjust heading size */
+  }
+}

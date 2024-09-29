@@ -3,6 +3,51 @@ const DeliveryPersonnel = require('../Models/deliveryPersonnel');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+const getUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+    res.status(200).json(users);
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).json({ message: 'Failed to fetch users' });
+  }
+};
+
+const blockUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    
+    user.isBlocked = true; // Set isBlocked status to true
+    await user.save();
+    
+    res.status(200).json({ message: 'User blocked successfully' });
+  } catch (error) {
+    console.error('Error blocking user:', error); // Log the error for debugging
+    res.status(500).json({ message: 'Failed to block user' });
+  }
+};
+
+const unblockUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    
+    user.isBlocked = false; // Set isBlocked status to false
+    await user.save();
+    
+    res.status(200).json({ message: 'User unblocked successfully' });
+  } catch (error) {
+    console.error('Error unblocking user:', error); // Log the error for debugging
+    res.status(500).json({ message: 'Failed to unblock user' });
+  }
+};
+
+
 const getUserDetails = async (req, res) => {
   try {
     const userId = req.user.id; // Assuming you store user ID in the token
@@ -68,24 +113,35 @@ const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
+    // Find the user by email
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).json({ message: 'Invalid credentials' });
     }
 
+    // Check if the user is blocked
+    if (user.isBlocked) {
+      return res.status(403).json({ message: 'Your account is blocked. Please contact support.' });
+    }
+
+    // Compare the password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
+    // Generate JWT token
     const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
       expiresIn: '1h'
     });
 
+    // Respond with the token and user role
     res.json({ token, role: user.role });
   } catch (error) {
+    console.error('Login error:', error); // Log the error for debugging
     res.status(500).json({ message: 'Server error' });
   }
 };
 
-module.exports = { registerUser, loginUser, getUserDetails };
+
+module.exports = { registerUser, loginUser, getUserDetails, getUsers, blockUser, unblockUser };

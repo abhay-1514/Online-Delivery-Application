@@ -52,14 +52,28 @@ const Login = () => {
         }
       } else {
         // Handle case where response is not 200
-        const errorMessage = response.data.message || "Login failed. Please try again.";
-        setError(errorMessage);
-        toast.error(errorMessage); // Show error toast
+      const errorMessage = response.data.message || "Login failed. Please try again.";
+      setError(errorMessage);
+      if (errorMessage.includes('blocked')) {
+        setTimeout(() => {
+          toast.error("Your account is blocked. Please contact support."); // Show blocked user toast
+        }, 3000);
+      } else {
+        toast.error(errorMessage); // Show error toast for other errors
+      }
       }
     } catch (err) {
       console.error('Error during login:', err);
-      setError('An error occurred. Please try again later.');
-      toast.error('An error occurred. Please try again later.'); // Show error toast
+      // Check if the error has a response object and message
+      const errorMessage = err.message || 'An error occurred. Please try again later.';
+      // Check if err has a response and is structured correctly
+      if (err.message && err.message.includes('blocked')) {
+        setError("Your account is blocked. Please contact support.");
+        toast.error("Your account is blocked. Please contact support."); // Show blocked user toast
+      } else {
+        setError(errorMessage);
+        toast.error(errorMessage); // Show generic error toast
+      }  
     }
   };
 

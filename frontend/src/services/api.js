@@ -9,8 +9,14 @@ const api = axios.create({
 const API_URL = 'http://localhost:5000/api';
 
 // Auth request for login
-export const login = async (data) => {
-  return api.post('/users/login', data);
+export const login = async (formData) => {
+  try {
+    const response = await axios.post(`${API_URL}/users/login`, formData);
+    return response; // Return the entire response
+  } catch (error) {
+    console.error('Login error:', error.response ? error.response.data : error.message);
+    throw error.response ? error.response.data : new Error('Network error'); // Throw the response data directly
+  }
 };
 
 // Auth request for registration
@@ -149,4 +155,29 @@ export const fetchDetails = async ()=> {
 } catch(error){
   throw error;
 }
+};
+
+export const fetchUsers = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/users`);
+    return response.data; // Assuming the response contains the users array
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const blockUser = async (userId) => {
+  try {
+    await axios.put(`${API_URL}/users/block/${userId}`);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const unblockUser = async (userId) => {
+  try {
+    await axios.put(`${API_URL}/users/unblock/${userId}`);
+  } catch (error) {
+    throw error;
+  }
 };
