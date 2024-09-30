@@ -1,10 +1,5 @@
 import axios from 'axios';
 
-// Create an instance of axios
-const api = axios.create({
-  baseURL: 'https://online-delivery-application-1.onrender.com/api', // Adjust this URL as per your backend
-});
-
 //API_URL = http://localhost:5000
 const API_URL = 'https://online-delivery-application-1.onrender.com/api';
 
@@ -21,7 +16,13 @@ export const login = async (formData) => {
 
 // Auth request for registration
 export const register = async (data) => {
-  return api.post('/users/register', data);
+  try{
+    const response = await axios.post(`${API_URL}/users/register`, data );
+    return response; 
+  }catch (error){
+    console.error('Registration error:', error.response ? error.response.data : error.message);
+    throw error.response ? error.response.data : new Error('Network error'); 
+  }
 };
 
 // Fetch user orders
@@ -126,7 +127,7 @@ export const assignDeliveryPersonnel = async (orderId, deliveryPersonnelId) => {
 };
 
 export const getAllProducts = async () => {
-  return await axios.get('http://localhost:5000/api/products/');
+  return await axios.get(`${API_URL}/products/`);
 };
 
 export const placeOrder = async (orderDetails) => {
