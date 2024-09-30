@@ -15,7 +15,7 @@ connectDB();
 const app = express();  
 
 app.use(cors({
-  origin: 'http://localhost:3000', // Allow requests from your frontend
+  origin: 'https://online-delivery-application1.netlify.app', // Allow requests from your frontend
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed HTTP methods
   credentials: true // Allow credentials (cookies, authorization headers, etc.)
 }));
