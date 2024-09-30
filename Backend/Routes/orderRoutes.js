@@ -13,9 +13,9 @@ const router = express.Router();
 
 router.post('/place', protect, placeOrder); 
 router.get('/myorders', protect, getUserOrders); 
-router.put('/:id/status', protect, updateOrderStatus); 
+router.put('/:id', protect, updateOrderStatus); 
 router.get('/vendor-orders', protect, getVendorOrders);
-router.put('/assign-delivery', protect, assignOrderToDeliveryPersonnel); 
+router.put('/:orderId/assign-delivery', protect, assignOrderToDeliveryPersonnel); 
 
 // New route for delivery personnel to get assigned orders
 router.get('/assigned-orders', protect, getAssignedOrdersForDeliveryPersonnel); 

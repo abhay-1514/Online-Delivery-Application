@@ -5,17 +5,28 @@ const DeliveryPersonnel = require('../Models/deliveryPersonnel'); // Ensure this
 // Get all orders for a vendor
 const getVendorOrders = async (req, res) => {
   try {
+    // Step 1: Fetch products for the vendor
     const vendorProducts = await Product.find({ vendor: req.user.id });
     const productIds = vendorProducts.map(product => product._id);
-    const orders = await Order.find({ product: { $in: productIds } }).populate('product').populate('deliveryPersonnel');
+
+    // Step 2: Fetch orders related to those products
+    const orders = await Order.find({ 'products.product': { $in: productIds } })
+      .populate('products.product')
+      .populate('user'); // Optional: populate user to get user details
+
+    // Step 3: Send the fetched orders back to the vendor
     res.json(orders);
   } catch (error) {
     res.status(500).json({ message: 'Server error fetching orders' });
   }
 };
 
+
+
+
 const assignOrderToDeliveryPersonnel = async (req, res) => {
-  const { orderId, deliveryPersonnelId } = req.body;
+  const { deliveryPersonnelId } = req.body;
+  const orderId = req.params.orderId;
 
   try {
     const order = await Order.findById(orderId);
@@ -35,19 +46,21 @@ const assignOrderToDeliveryPersonnel = async (req, res) => {
 
 const getAssignedOrdersForDeliveryPersonnel = async (req, res) => {
   try {
-    // Find the delivery personnel associated with the logged-in user
     const deliveryPersonnel = await DeliveryPersonnel.findOne({ user: req.user.id });
     
     if (!deliveryPersonnel) {
       return res.status(404).json({ message: 'Delivery personnel not found' });
     }
-
+ 
     const deliveryPersonnelId = deliveryPersonnel.id; 
     
-    const orders = await Order.find({ deliveryPersonnel: deliveryPersonnelId }).populate('products.product');
+    const orders = await Order.find({ deliveryPersonnel: deliveryPersonnelId })
+      .populate('user', 'name email address') // Populates user info including address
+      .populate('products.product');
 
     if (orders.length === 0) {
-      return res.status(404).json({ message: 'No orders assigned to this delivery personnel' });
+      // Return an empty array with a 200 status instead of a 404
+      return res.status(200).json([]); 
     }
 
     res.status(200).json(orders);
@@ -56,6 +69,9 @@ const getAssignedOrdersForDeliveryPersonnel = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+
+
 
  
 const placeOrder = async (req, res) => {
@@ -117,7 +133,9 @@ const getUserOrders = async (req, res) => {
 };
 
 const updateOrderStatus = async (req, res) => {
-  const { id } = req.params; // Order ID from the request parameters
+  console.log('Request Parameters:', req.params);
+  const id  = req.params.id; // Order ID from the request parameters
+  console.log(req.params.id)
   const { status } = req.body; // New status from the request body
   const deliveryPersonnel = await DeliveryPersonnel.findOne({ user: req.user.id });
     

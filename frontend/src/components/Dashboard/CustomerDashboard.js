@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { getAllProducts, getUserOrders } from '../../services/api';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { CartContext } from '../../context/cartContext';  // Import Cart Context
 import 'react-toastify/dist/ReactToastify.css';
@@ -11,10 +11,10 @@ const CustomerDashboard = () => {
   const [orders, setOrders] = useState([]);
   const { cart, setCart } = useContext(CartContext);  // Use cart and setCart from context
   const navigate = useNavigate(); // Initialize useNavigate
-  const location = useLocation(); // Use location to access passed state
 
-  // Retrieve user's name from location state
-  const userName = location.state?.userDetails?.name || 'User'; // Default to 'User' if name is not available
+  const storedUserDetails = JSON.parse(localStorage.getItem('userDetails'));
+const userName = storedUserDetails?.name || 'User'; // Default to 'User' if name is not available
+
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -27,13 +27,23 @@ const CustomerDashboard = () => {
     };
     fetchProducts();
 
-  const fetchOrders = async () => {
-    try {
-      const response = await getUserOrders();
-      setOrders(response.data.orders);  // Store the fetched orders
-    } catch (error) {
-      toast.error('Failed to fetch orders.');
-    }
+    const fetchOrders = async () => {
+      try {
+          const response = await getUserOrders();
+          console.log("Full Response:", response); // Log the entire response object
+          console.log("Response Data:", response); // Log response directly
+  
+          // Check if the response is an array and has orders
+          if (Array.isArray(response) && response.length > 0) {
+              setOrders(response); // Set orders directly from response
+          } else {
+              setOrders([]); // Set orders to empty if not found
+          }
+      } catch (error) {
+          console.error("Error fetching orders:", error);
+          toast.error('Failed to fetch orders.');
+          setOrders([]); // Set orders to an empty array if there's an error
+      }
   };
   fetchOrders();
 }, []);
@@ -80,41 +90,47 @@ const CustomerDashboard = () => {
       </button>
 
       <section className="products-section">
-        <h2>All Products</h2>
-        <ul>
-          {products.map(product => (
-            <li key={product._id}>
-              <h3>{product.name}</h3>
-              <p>{product.description}</p>
-              <p>Price: Rs.{product.price}</p>
-              <button onClick={() => addToCart(product)}>Add to Cart</button>
-            </li>
-          ))}
-        </ul>
-      </section>
+  <h2>All Products</h2>
+  <ul>
+    {products.map(product => (
+      <li key={product._id}>
+        <img src={product.imageUrl} alt={product.name} />
+        <div className="product-details">
+          <h3>{product.name}</h3>
+          <p>{product.description}</p>
+          <p>Price: Rs.{product.price}</p>
+        </div>
+        <button onClick={() => addToCart(product)}>Add to Cart</button>
+      </li>
+    ))}
+  </ul>
+</section>
 
        {/* Customer Orders Section */}
        <section className="orders-section">
-        <h2>Your Orders</h2>
-        {orders.length > 0 ? (
-          <ul>
+    <h2>Your Orders</h2>
+    {orders.length === 0 ? (
+        <p>No orders found.</p>
+    ) : (
+        <ul>
             {orders.map(order => (
-              <li key={order._id}>
-                <h3>Order #{order._id}</h3>
-                <p>Date: {new Date(order.createdAt).toLocaleDateString()}</p>
-                <p>Total: Rs.{order.totalAmount}</p>
-                <ul>
-                  {order.products.map(product => (
-                    <li key={product._id}>{product.name} - Rs.{product.price}</li>
-                  ))}
-                </ul>
-              </li>
+                <li key={order._id}>
+                    <h3>Order Id:#{order._id}</h3>
+                    <p>Date: {new Date(order.createdAt).toLocaleDateString()}</p>
+                    <p>Total: Rs.{order.totalAmount}</p>
+                    <ul>
+                        {order.products.map(({ product, quantity }) => (
+                            <li className='name' key={product._id}>
+                                {product.name} - Rs.{product.price} (Quantity: {quantity})
+                            </li>
+                        ))}
+                    </ul>
+                </li>
             ))}
-          </ul>
-        ) : (
-          <p>No orders found.</p>
-        )}
-      </section>
+        </ul>
+    )}
+</section>
+
 
       <ToastContainer
         position="top-right"

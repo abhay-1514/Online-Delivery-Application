@@ -64,9 +64,12 @@ const CartPage = () => {
         {cart.length > 0 ? (
           cart.map(({ product, quantity }) => (
             <li key={product._id}>
-              <h3>{product.name}</h3>
-              <p>Price: Rs.{product.price}</p>
-              <p>Quantity: {quantity}</p>
+              <img src={product.imageUrl} alt={product.name} width="100" height="100" />
+              <div className="product-details">
+                <h3>{product.name}</h3>
+                <p>Price: Rs.{product.price}</p>
+                <p>Quantity: {quantity}</p>
+              </div>
               <button onClick={() => removeFromCart(product._id)}>Remove</button>
             </li>
           ))
@@ -75,7 +78,7 @@ const CartPage = () => {
         )}
       </ul>
       <h3>Total Amount: Rs.{calculateTotal()}</h3>
-      {cart.length > 0 && <button onClick={handlePlaceOrder}>Place Order</button>}
+      {cart.length > 0 && <button className= "Place-order" onClick={handlePlaceOrder}>Place Order</button>}
 
        {/* Back to Dashboard Button */}
        <button className="back-button" onClick={goBackToDashboard}>

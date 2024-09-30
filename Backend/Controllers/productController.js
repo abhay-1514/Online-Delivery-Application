@@ -4,22 +4,26 @@ const Order = require('../Models/order');
 // Add a new product (Vendor only)
 const addProduct = async (req, res) => {
   const { name, description, price, category } = req.body;
+  const imageUrl = `http://localhost:5000/api/uploads/${req.file.filename}`; 
+  console.log(req.file.path) // Get the file path from multer
 
   try {
     const product = new Product({
       name,
       description,
-      price,
+      price, 
       category,
       vendor: req.user.id,  // vendor is the logged-in user
+      imageUrl, // Add the imageUrl to the product
     });
 
     const savedProduct = await product.save();
     res.status(201).json(savedProduct);
   } catch (error) {
-    res.status(500).json({ message: 'Server error while adding product' });
+    res.status(500).json({ message: 'Server error while adding product', error: error.message });
   }
 };
+
 
 // Get all products (for customers only)
 const getAllProducts = async (req, res) => {
@@ -58,13 +62,24 @@ const updateProduct = async (req, res) => {
       return res.status(401).json({ message: 'Not authorized to update this product' });
     }
 
+    // Prepare updated fields
+    const updatedFields = {
+      name: req.body.name || product.name,
+      description: req.body.description || product.description,
+      price: req.body.price || product.price,
+      category: req.body.category || product.category,
+      // Only update the imageUrl if a new file is uploaded
+      ...(req.file && { imageUrl: req.file.path }),
+    };
+
     // Update product details
-    const updatedProduct = await Product.findByIdAndUpdate(id, req.body, { new: true });
+    const updatedProduct = await Product.findByIdAndUpdate(id, updatedFields, { new: true });
     res.json(updatedProduct);
   } catch (error) {
-    res.status(500).json({ message: 'Server error while updating product',error: error.message });
+    res.status(500).json({ message: 'Server error while updating product', error: error.message });
   }
 };
+
 
 // Delete a product (Vendor only)
 const deleteProduct = async (req, res) => {

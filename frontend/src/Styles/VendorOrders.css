@@ -1,0 +1,103 @@
+vendorOrders.css
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa; /* Light background for contrast */
+    margin: 0;
+    padding: 20px;
+  }
+  
+  h1 {
+    color: #343a40; /* Dark color for the title */
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  ul {
+    list-style-type: none; /* Remove default list styles */
+    padding: 0;
+  }
+  
+  li {
+    background-color: #ffffff; /* White background for each order */
+    border: 1px solid #dee2e6; /* Light border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  }
+  
+  h3 {
+    color: #007bff; /* Primary color for order ID */
+    margin: 0;
+  }
+  
+  h4 {
+    color: #6c757d; /* Secondary color for subheadings */
+  }
+  
+  strong {
+    color: #343a40; /* Darker color for product names */
+  }
+  
+  button {
+    background-color: #28a745; /* Green background for the button */
+    color: white; /* White text color */
+    border: none; /* Remove border */
+    padding: 10px 15px; /* Padding for button */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s; /* Smooth transition */
+  }
+  
+  button:hover {
+    background-color: #218838; /* Darker green on hover */
+  }
+  
+  select {
+    margin-top: 10px; /* Space above select */
+    padding: 8px; /* Padding for select */
+    border-radius: 5px; /* Rounded corners */
+    border: 1px solid #ced4da; /* Border color */
+    width: 100%; /* Full width for select */
+    max-width: 250px; /* Max width for select */
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    body {
+      padding: 10px; /* Reduce padding on smaller screens */
+    }
+  
+    h1 {
+      font-size: 1.5em; /* Smaller font size for headings */
+    }
+  
+    li {
+      padding: 10px; /* Reduce padding in list items */
+    }
+  
+    button {
+      width: 100%; /* Make buttons full width on smaller screens */
+      padding: 12px; /* Increase padding for better touch targets */
+    }
+  
+    select {
+      max-width: 100%; /* Full width for select on smaller screens */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    h1 {
+      font-size: 1.2em; /* Further reduce heading size for mobile */
+    }
+  
+    li {
+      padding: 8px; /* Further reduce padding in list items */
+    }
+  
+    button {
+      padding: 10px; /* Adjust button padding */
+    }
+  }
+  

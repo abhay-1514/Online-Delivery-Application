@@ -35,6 +35,8 @@ const Login = () => {
         // Fetch user details
         const userDetails = await fetchDetails(); // Call fetchDetails to get user info
         console.log('User Details:', userDetails); // Log user details if needed
+        localStorage.setItem('userDetails', JSON.stringify(userDetails)); // Store user details in localStorage
+
 
         // Navigate to the respective dashboard based on user role
         if (data.role === 'Customer') {
@@ -47,7 +49,7 @@ const Login = () => {
           }, 1000);
         } else if (data.role === 'DeliveryPersonnel') {
           setTimeout(() => {
-            navigate('/deliverypersonneldashboard', { state: { userDetails } });
+            navigate('/deliverydashboard', { state: { userDetails } });
           }, 1000);
         }
       } else {

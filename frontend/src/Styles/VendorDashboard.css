@@ -14,13 +14,13 @@ body {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-h1 {
+.vendor-dashboard h1 {
   text-align: center;
   color: #343a40;
   margin-bottom: 20px;
 }
 
-button {
+.vendor-dashboard button {
   padding: 10px 15px;
   margin: 10px 5px;
   border: none;
@@ -36,7 +36,7 @@ button {
   color: white;
 }
 
-.navigate-orders-button:hover{
+.navigate-orders-button:hover {
   background-color: #0061c9;
 }
 
@@ -52,11 +52,11 @@ button {
   background-color: #ae0011;
 }
 
-button:hover {
+.vendor-dashboard button:hover {
   transform: scale(1.02);
 }
 
-button:focus {
+.vendor-dashboard button:focus {
   outline: none;
 }
 
@@ -90,17 +90,30 @@ ul {
   padding: 0;
 }
 
-li {
+.vendor-dashboard li {
   padding: 15px;
   border: 1px solid #e9ecef;
   border-radius: 5px;
   margin-bottom: 10px;
   background-color: #f1f3f5;
   transition: background-color 0.3s;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 li:hover {
   background-color: #e2e6ea;
+}
+
+.product-image {
+  width: 100px;
+  height: 100px;
+  margin-right: 20px;
+}
+
+.product-details {
+  flex-grow: 1;
 }
 
 h3 {
@@ -124,23 +137,30 @@ button.update-button:hover {
 
 button.delete-button {
   border-radius: 10px;
-  background-color: #28a745; /* Green for Update button */
+  background-color: #dc3545; /* Red for Delete button */
   color: white;
 }
 
 button.delete-button:hover {
-  background-color: #218838; /* Darker green on hover */
+  background-color: #ae0011; /* Darker red on hover */
 }
 
 button.add-button {
   border-radius: 10px;
   margin-top: 10px;
-  background-color: #28a745; /* Green for Update button */
+  background-color: #28a745; /* Green for Add button */
   color: white;
 }
 
 button.add-button:hover {
   background-color: #218838; /* Darker green on hover */
+}
+
+/* Add styles for images */
+img {
+  max-width: 100%; /* Make image responsive */
+  height: auto;    /* Maintain aspect ratio */
+  border-radius: 5px; /* Optional: round the corners of the image */
 }
 
 /* Add styles for the toast notifications */
@@ -183,6 +203,7 @@ button.add-button:hover {
 
   li {
     padding: 10px; /* Reduced padding */
+    flex-direction: column; /* Stack image and details on mobile */
   }
 
   h3 {

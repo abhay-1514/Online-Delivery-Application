@@ -1,39 +1,64 @@
 .cart-page {
-    padding: 20px;
-  }
-  
-  .cart-page ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .cart-page li {
-    margin-bottom: 15px;
-    padding: 10px;
-    border: 1px solid #218838;
-    border-radius: 5px;
-  }
-  
-  button {
-    margin-top: 10px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #218838;
-  }
-  
-  /* Style for Back to Dashboard Button */
-  button.back-button {
-    background-color: #28a745;
-    color: white;
-    margin-top: 20px;
-  }
-  
-  button.back-button:hover {
-    background-color: #218838;
-  }
-  
+  padding: 20px;
+}
+
+.cart-page ul {
+  list-style: none;
+  padding: 0;
+}
+
+.cart-page li {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.cart-page li img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-right: 20px;
+}
+
+.cart-page li .product-details {
+  flex: 1;
+}
+
+.cart-page li .product-details h3 {
+  margin-top: 0;
+}
+
+.cart-page li button {
+  margin-left: 20px;
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cart-page li button:hover {
+  background-color: #0056b3;
+}
+
+.Place-order {
+   background-color: #007bff;
+   border-radius: 10px;
+}
+
+.Place-order:hover{
+  background-color: #0056b3;
+}
+
+.back-button{
+  background-color: #007bff;
+  border-radius: 10px;
+  float:  right;
+}
+
+.back-button:hover{
+  background-color: #0056b3;
+}

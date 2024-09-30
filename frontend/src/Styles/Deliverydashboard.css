@@ -1,0 +1,102 @@
+/* styles.css */
+
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4; /* Light background for contrast */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+h1, h2, h3 {
+    color: #333; /* Dark color for headings */
+}
+
+/* Button Styles */
+.btn {
+    background-color: #007bff; /* Bootstrap Primary */
+    color: white;
+    border: none;
+    margin: 3px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}
+
+/* Card Styles for Products or Orders */
+.card {
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.card img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+/* Order List Component */
+.order-list {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+}
+
+.order-item {
+    padding: 15px;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 10px;
+    background-color: #fff;
+    border-radius: 8px;
+}
+
+.order-item:last-child {
+    border-bottom: none; /* Remove border from last item */
+}
+
+/* Dashboard Styles */
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.dashboard-header {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Toast Notifications */
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    transition: opacity 0.5s ease;
+    z-index: 1000;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .card {
+        margin: 10px;
+    }
+
+    .btn {
+        width: 100%; /* Full width buttons on smaller screens */
+    }
+}

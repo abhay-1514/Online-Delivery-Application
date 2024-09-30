@@ -24,9 +24,13 @@ const productSchema = new mongoose.Schema({
   },
   vendor: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',  // Reference to the vendor who adds the product
+    ref: 'User', // Reference to the vendor who adds the product
     required: true,
   },
+  imageUrl: {  // New field for storing image URL
+    type: String,
+    required: true,
+  }
 }, {
   timestamps: true,
 });

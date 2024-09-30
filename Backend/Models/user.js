@@ -18,6 +18,7 @@ const userSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "DeliveryPersonnel",
     }, // Optional: reference to delivery profile
+    address: { type: String, required: true }, // Add the address field here
   },
   {
     timestamps: true,

@@ -77,7 +77,7 @@ const registerUser = async (req, res) => {
     // Hash the password before saving
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = new User({ name, email, password: hashedPassword, role });
+    const user = new User({ name, email, password: hashedPassword, role, address });
     await user.save();
 
     // If the user is a delivery personnel

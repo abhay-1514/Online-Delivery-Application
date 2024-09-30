@@ -1,4 +1,3 @@
-// src/services/api.js
 import axios from 'axios';
 
 // Create an instance of axios
@@ -40,12 +39,18 @@ export const getUserOrders = async () => {
 };
 
 // Fetch assigned orders for delivery personnel
-export const getAssignedOrders = async (token) => {
-  return api.get('/orders/assigned', {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+export const getAssignedOrders = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.get(`${API_URL}/orders/assigned-orders`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 // Add a product
@@ -53,6 +58,7 @@ export const addProduct = async (productData) => {
   try {
     const response = await axios.post(`${API_URL}/products`, productData, {
       headers: {
+        'Content-Type': 'multipart/form-data', // Important for file uploads
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }
     });
@@ -83,7 +89,8 @@ export const updateProduct = async (productId, updatedProductData) => {
     const token = localStorage.getItem('token');
     const response = await axios.put(`${API_URL}/products/${productId}`, updatedProductData, {
       headers: {
-        Authorization: `Bearer ${ token}`
+        'Content-Type': 'multipart/form-data', // Important for file uploads
+        Authorization: `Bearer ${token}`
       }
     });
     return response.data;
@@ -107,60 +114,70 @@ export const deleteProduct = async (productId) => {
   }
 };
 
-export const assignDeliveryPersonnel = async (orderId, personnelId) => {
+// Other API methods remain unchanged...
+
+export const assignDeliveryPersonnel = async (orderId, deliveryPersonnelId) => {
   const token = localStorage.getItem('token');
-  return axios.put(`http://localhost:5000/api/orders/${orderId}/assign`, 
-    { personnelId }, 
+  return axios.put(`${API_URL}/orders/${orderId}/assign-delivery`,
+    { deliveryPersonnelId },
     { headers: { Authorization: `Bearer ${token}` } }
   );
 };
-
 
 export const getAllProducts = async () => {
   return await axios.get('http://localhost:5000/api/products/');
 };
 
 export const placeOrder = async (orderDetails) => {
-  try{
+  try {
     const token = localStorage.getItem('token');
-    const response = await axios.post(`${API_URL}/orders/place`, orderDetails , {
+    const response = await axios.post(`${API_URL}/orders/place`, orderDetails, {
       headers: {
         Authorization: `Bearer ${token}`
       }
     });
     return response.data;
-  } catch(error){
+  } catch (error) {
     throw error;
   }
 };
 
 export const getVendorOrders = async () => {
-  try{
+  try {
     const token = localStorage.getItem('token');
     const response = await axios.get(`${API_URL}/orders/vendor-orders`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
-  });
-  return response.data;
-} catch(error){
+    });
+    return response.data;
+  } catch (error) {
     throw error;
-}
+  }
 };
 
-export const fetchDetails = async ()=> {
-  try{
+export const getDeliveryPersonnel = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/delivery/personnel`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const fetchDetails = async () => {
+  try {
     const token = localStorage.getItem('token');
-    const response = await axios.get(`${API_URL}/users/userdetails`,{
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
-    }
-  });
-  return response.data;
-} catch(error){
-  throw error;
-}
+    const response = await axios.get(`${API_URL}/users/userdetails`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const fetchUsers = async () => {
@@ -184,6 +201,21 @@ export const unblockUser = async (userId) => {
   try {
     await axios.put(`${API_URL}/users/unblock/${userId}`);
   } catch (error) {
+    throw error;
+  }
+};
+
+
+export const updateOrderStatus = async (orderId, status)=>{
+  try{
+    const token = localStorage.getItem('token');
+await axios.put(`${API_URL}/orders/${orderId}`, {status} , {
+  headers:{
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`
+  }
+});
+  }catch(error){
     throw error;
   }
 };
