@@ -2,10 +2,11 @@ import axios from 'axios';
 
 // Create an instance of axios
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api', // Adjust this URL as per your backend
+  baseURL: 'https://online-delivery-application-1.onrender.com/api', // Adjust this URL as per your backend
 });
 
-const API_URL = 'http://localhost:5000/api';
+//API_URL = http://localhost:5000
+const API_URL = 'https://online-delivery-application-1.onrender.com/api';
 
 // Auth request for login
 export const login = async (formData) => {
