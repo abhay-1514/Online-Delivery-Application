@@ -1,5 +1,7 @@
 const express = require('express');
 const multer = require('multer');  // Import multer for handling file uploads
+const fs = require('fs'); // Import fs for file system operations
+const path = require('path'); // Import path for handling file paths
 const {
   addProduct,
   getAllProducts,
@@ -8,7 +10,20 @@ const {
   getVendorProducts,
 } = require('../Controllers/productController');
 const { protect } = require('../Middleware/authMiddleware');
+
 const router = express.Router();
+
+// Function to ensure uploads directory exists
+const createUploadsDirectory = () => {
+  const dir = path.join(__dirname, '../../uploads'); // Adjust the path as necessary
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+    console.log('Uploads directory created');
+  }
+};
+
+// Create the uploads directory
+createUploadsDirectory();
 
 // Set up multer for file uploads
 const storage = multer.diskStorage({
