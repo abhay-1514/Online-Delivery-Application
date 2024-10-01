@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 //API_URL = http://localhost:5000
-const API_URL = 'https://online-delivery-application-1.onrender.com/api';
+const API_URL = 'https://online-delivery-application-729g.onrender.com/api';
 
 // Auth request for login
 export const login = async (formData) => {
