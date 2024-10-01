@@ -4,7 +4,12 @@ const Order = require('../Models/order');
 // Add a new product (Vendor only)
 const addProduct = async (req, res) => {
   const { name, description, price, category } = req.body;
-  const imageUrl = `http://localhost:5000/api/uploads/${req.file.filename}`; 
+
+  if (!req.file) {
+    return res.status(400).json({ message: 'No file uploaded' });
+  }
+
+  const imageUrl = `${req.protocol}://${req.get('host')}/api/uploads/${req.file.filename}`;
   console.log(req.file.path) // Get the file path from multer
 
   try {
