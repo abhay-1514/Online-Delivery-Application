@@ -13,12 +13,7 @@ connectDB();
 
 const app = express();  
 
-app.use(cors({
-  //origin: 'http://localhost:3000',
-  origin: true , // Allow requests from your frontend
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed HTTP methods
-  credentials: true // Allow credentials (cookies, authorization headers, etc.)
-}));
+app.use(cors());
 
 // Middleware
 app.use(express.json()); // For parsing application/json

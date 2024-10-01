@@ -1,14 +1,34 @@
 const Product = require('../Models/product');
 const Order = require('../Models/order');
+const fs = require('fs'); // Import fs for file system operations
+const path = require('path'); 
 
 // Add a new product (Vendor only)
 const addProduct = async (req, res) => {
   const { name, description, price, category } = req.body;
 
+  const createUploadsDirectory = () => {
+    // Set the upload path based on the environment
+    const uploadDir = process.env.UPLOADS_DIR || path.join(__dirname, '../../uploads'); // Use environment variable or default to relative path
+  
+    // Check if the uploads directory exists
+    if (fs.existsSync(uploadDir)) {
+      console.log('Uploads directory already exists at:', uploadDir);
+      return; // Exit the function if the directory exists
+    }
+  
+    // Create uploads directory if it doesn't exist
+    fs.mkdirSync(uploadDir, { recursive: true });
+    console.log('Uploads directory created at:', uploadDir);
+  };
+  
+  // Create the uploads directory
+  createUploadsDirectory();
+
   if (!req.file) {
     return res.status(400).json({ message: 'No file uploaded' });
   }
-
+ // const imageUrl = `http://localhost:5000/api/uploads/${req.file.filename}`;
   const imageUrl = `${req.protocol}://${req.get('host')}/api/uploads/${req.file.filename}`;
   console.log(req.file.path) // Get the file path from multer
 
