@@ -108,28 +108,29 @@ const userName = storedUserDetails?.name || 'User'; // Default to 'User' if name
 
        {/* Customer Orders Section */}
        <section className="orders-section">
-    <h2>Your Orders</h2>
-    {orders.length === 0 ? (
-        <p>No orders found.</p>
-    ) : (
-        <ul>
-            {orders.map(order => (
-                <li key={order._id}>
-                    <h3>Order Id:#{order._id}</h3>
-                    <p>Date: {new Date(order.createdAt).toLocaleDateString()}</p>
-                    <p>Total: Rs.{order.totalAmount}</p>
-                    <ul>
-                        {order.products.map(({ product, quantity }) => (
-                            <li className='name' key={product._id}>
-                                {product.name} - Rs.{product.price} (Quantity: {quantity})
-                            </li>
-                        ))}
-                    </ul>
-                </li>
+  <h2>Your Orders</h2>
+  {orders.length === 0 ? (
+    <p>No orders found.</p>
+  ) : (
+    <ul>
+      {orders.map(order => (
+        <li key={order._id}>
+          <h3>Order Id:#{order._id}</h3>
+          <p>Date: {new Date(order.createdAt).toLocaleDateString()}</p>
+          <p>Total: Rs.{order.totalAmount}</p>
+          <ul>
+            {order.products.map(({ product, quantity }) => (
+              <li className='name' key={product._id}>
+                {product ? product.name : 'Product not available'} - Rs.{product ? product.price : 'N/A'} (Quantity: {quantity})
+              </li>
             ))}
-        </ul>
-    )}
+          </ul>
+        </li>
+      ))}
+    </ul>
+  )}
 </section>
+
 
 
       <ToastContainer

@@ -24,7 +24,7 @@ app.use('/api/products', productRoutes); // Product routes
 app.use('/api/orders', orderRoutes); // Order routes
 app.use('/api/delivery',deliveryRoutes);// Delivery Routes
    
-app.use('/api/uploads', express.static('uploads'));
+app.use('/api/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
 // Error handling middleware
